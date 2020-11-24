@@ -141,6 +141,11 @@ export class History {
       // in-config enter guards
       activated.map(m => m.beforeEnter), // 路由独享守卫beforeEnter
       // async components
+      // 这里加载异步组件(懒加载组件)利用的是promise微任务
+      // 所以到这里eventLoop单轮结束，找到下一个宏任务，也就是整个vue的初始化，开始App.vue的生命周期
+      // 等到整个vue的初始化完成之后再到这里来执行微任务，也就是处理加载完成的异步组件
+      // 异步组件加载完成后不是立马render，而且是先执行完剩下的导航守卫，更新this.current为最新的route
+      // 更新完route对象的时候这里的逻辑结束，才触发render
       resolveAsyncComponents(activated) // 处理activated中的异步组件的funciton
     )
 
@@ -196,7 +201,7 @@ export class History {
         }
         // 此时，7种守卫中的6种已经执行完毕，还剩下全局后置钩子afterEach
         this.pending = null
-        onComplete(route) // 调用onComplete回调  此时会执行全局后置钩子afterEach，至此7种守卫钩子都已经执行完毕  this.current变为新的route对象，触发组件更新
+        onComplete(route) // 调用onComplete回调  此时会执行全局后置钩子afterEach，至此7种守卫钩子都已经执行完毕  this.current变为新的route对象，这里的逻辑结束，触发组件更新
         if (this.router.app) {
           this.router.app.$nextTick(() => { // 将postEnterCbs(对应的是beforeRouteEnter中next(cb)中的回调函数cb)放在nextTick（组件统一更新的时候）中，执行时机在组件mounted周期之后
             postEnterCbs.forEach(cb => {

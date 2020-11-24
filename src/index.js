@@ -124,7 +124,7 @@ export default class VueRouter { // 2.new VueRouter()创建VueRouter实例  这�
     // history模式 在new VueRouter()就监听了popstate事件
     // hash模式    在init的时候才监听popstate和hashchange事件
     // 如果在此之前已经监听hashchange事件，那么history.transitionTo()就会触发，不合理，而popstate事件不会触发
-    if (history instanceof HTML5History) { // history模式
+    if (history instanceof HTML5History) { // history模式，new VueRouter()的时候就执行核心逻辑transitionTo
       history.transitionTo(history.getCurrentLocation())
     } else if (history instanceof HashHistory) { // hash模式
       const setupHashListener = () => { // 监听popstate和hashchange事件
@@ -212,7 +212,7 @@ export default class VueRouter { // 2.new VueRouter()创建VueRouter实例  这�
     if (!route) {
       return []
     }
-    return [].concat.apply([], route.matched.map(m => {
+    return [].concat.apply([], route.matched.map(m => { // route对应的所有组件
       return Object.keys(m.components).map(key => {
         return m.components[key]
       })
