@@ -215,7 +215,7 @@ export class History {
 
   updateRoute (route: Route) { // 更新this.current为最新的route对象，执行this.cb回调和全局后置钩子afterEach
     const prev = this.current
-    this.current = route
+    this.current = route // 更新route对象，这里会触发router-view组件的更新，实现路由改变而页面不跳转刷新
     this.cb && this.cb(route) // router.apps中的每个vm实例的_route指向新的route对象
     this.router.afterHooks.forEach(hook => {
       hook && hook(route, prev)
