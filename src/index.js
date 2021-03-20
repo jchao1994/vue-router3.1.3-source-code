@@ -15,7 +15,8 @@ import { AbstractHistory } from './history/abstract'
 
 import type { Matcher } from './create-matcher'
 
-export default class VueRouter { // 2.new VueRouter()创建VueRouter实例  这个实例在new Vue()的时候会绑定到vm._router上
+// 2.new VueRouter()创建VueRouter实例  这个实例在new Vue()的时候会绑定到vm._router上
+export default class VueRouter {
   static install: () => void;
   static version: string;
 

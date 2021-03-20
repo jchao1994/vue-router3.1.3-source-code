@@ -3,7 +3,8 @@ import Link from './components/link'
 
 export let _Vue
 
-export function install (Vue) { // 1.安装vue-router插件 Vue.use(VueRouter)
+// 1.安装vue-router插件 Vue.use(VueRouter)
+export function install (Vue) {
   if (install.installed && _Vue === Vue) return // 防止重复安装
   install.installed = true
 

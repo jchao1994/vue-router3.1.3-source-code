@@ -30,6 +30,8 @@ export default {
       if (vnodeData.routerView) {
         depth++
       }
+      // 第一次正常渲染之后，vnodeData.keepAlive才会为true
+      // 也就是inactive为true，表示第二次渲染
       if (vnodeData.keepAlive && parent._directInactive && parent._inactive) {
         inactive = true
       }
@@ -38,7 +40,8 @@ export default {
     data.routerViewDepth = depth
 
     // render previous view if the tree is inactive and kept-alive
-    // 处理keep-alive，直接渲染  第一次如何直接从缓存中取？？？
+    // 处理keep-alive，直接渲染，第二次渲染才会走这个逻辑，第一次渲染为正常渲染
+    // 如果缓存丢失，直接渲染空的vnode
     if (inactive) {
       const cachedData = cache[name]
       const cachedComponent = cachedData && cachedData.component
